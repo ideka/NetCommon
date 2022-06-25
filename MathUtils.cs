@@ -2,7 +2,7 @@
 
 namespace Ideka.NetCommon
 {
-    internal static class MathUtils
+    public static class MathUtils
     {
         public const double DegToRad = Math.PI / 180;
         public const double RadToDeg = 1 / DegToRad;

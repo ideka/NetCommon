@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Ideka.NetCommon
 {
-    internal static class EnumerableExtensions
+    public static class EnumerableExtensions
     {
         public static IEnumerable<(int, T)> Enumerate<T>(this IEnumerable<T> source)
             => source.Select((t, i) => (i, t));

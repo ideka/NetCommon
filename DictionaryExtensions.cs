@@ -2,7 +2,7 @@
 
 namespace Ideka.NetCommon
 {
-    internal static class DictionaryExtensions
+    public static class DictionaryExtensions
     {
         public static void Deconstruct<TK, TV>(this KeyValuePair<TK, TV> pair, out TK key, out TV value)
         {
