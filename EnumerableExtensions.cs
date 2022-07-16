@@ -6,6 +6,9 @@ namespace Ideka.NetCommon
 {
     public static class EnumerableExtensions
     {
+        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> source)
+            => source.ToDictionary(x => x.Key, x => x.Value);
+
         public static IEnumerable<(int, T)> Enumerate<T>(this IEnumerable<T> source)
             => source.Select((t, i) => (i, t));
 
