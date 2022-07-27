@@ -6,10 +6,10 @@ namespace Ideka.NetCommon
 {
     public static class HumanReadable
     {
-        private static readonly SortedList<double, Func<TimeSpan, string>> offsets =
+        private static readonly SortedList<double, Func<TimeSpan, string>> Offsets =
             new SortedList<double, Func<TimeSpan, string>>
             {
-                { 0.75, _ => "less than a minute"},
+                { 0.75, _ => "under a minute"},
                 { 1.5, _ => "about a minute"},
                 { 45, x => $"{x.TotalMinutes:F0} minutes"},
                 { 90, x => "about an hour"},
@@ -26,7 +26,7 @@ namespace Ideka.NetCommon
         {
             var suffix = DateTime.UtcNow > utcInput ? " ago" : " from now";
             var delta = new TimeSpan(Math.Abs((DateTime.UtcNow - utcInput).Ticks));
-            return offsets.First(n => delta.TotalMinutes < n.Key).Value(delta) + suffix;
+            return Offsets.First(n => delta.TotalMinutes < n.Key).Value(delta) + suffix;
         }
     }
 }
