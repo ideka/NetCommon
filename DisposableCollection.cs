@@ -1,24 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Ideka.NetCommon
+namespace Ideka.NetCommon;
+
+public class DisposableCollection : IDisposable
 {
-    public class DisposableCollection : IDisposable
+    private readonly HashSet<IDisposable> _disposables = new();
+
+    public T Add<T>(T disposable) where T : notnull, IDisposable
     {
-        private readonly HashSet<IDisposable> _disposables = new();
+        _disposables.Add(disposable);
+        return disposable;
+    }
 
-        public T Add<T>(T disposable) where T : notnull, IDisposable
-        {
-            _disposables.Add(disposable);
-            return disposable;
-        }
+    public void Dispose()
+    {
+        foreach (var disposable in _disposables)
+            disposable.Dispose();
 
-        public void Dispose()
-        {
-            foreach (var disposable in _disposables)
-                disposable.Dispose();
-
-            _disposables.Clear();
-        }
+        _disposables.Clear();
     }
 }

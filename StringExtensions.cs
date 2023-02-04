@@ -1,8 +1,7 @@
-﻿namespace Ideka.NetCommon
+﻿namespace Ideka.NetCommon;
+
+public static class StringExtensions
 {
-    public static class StringExtensions
-    {
-        public static string Format(this string format, params object[] args)
-            => string.Format(format, args);
-    }
+    public static string Format(this string format, params object?[] args)
+        => string.Format(format, args);
 }

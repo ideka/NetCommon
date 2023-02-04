@@ -1,19 +1,18 @@
 ﻿using System;
 
-namespace Ideka.NetCommon
+namespace Ideka.NetCommon;
+
+public readonly struct WhenDisposed : IDisposable
 {
-    public readonly struct WhenDisposed : IDisposable
+    private readonly Action _act;
+
+    public WhenDisposed(Action act)
     {
-        private readonly Action _act;
+        _act = act;
+    }
 
-        public WhenDisposed(Action act)
-        {
-            _act = act;
-        }
-
-        public void Dispose()
-        {
-            _act();
-        }
+    public void Dispose()
+    {
+        _act();
     }
 }
