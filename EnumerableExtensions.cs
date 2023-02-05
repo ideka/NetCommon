@@ -40,25 +40,23 @@ public static class EnumerableExtensions
         comparer ??= Comparer<TKey>.Default;
         int factor = max ? -1 : 1;
 
-        using (var sourceIterator = source.GetEnumerator())
+        using var sourceIterator = source.GetEnumerator();
+        if (!sourceIterator.MoveNext())
+            throw new InvalidOperationException("Sequence contains no elements");
+
+        var most = sourceIterator.Current;
+        var mostKey = selector(most);
+        while (sourceIterator.MoveNext())
         {
-            if (!sourceIterator.MoveNext())
-                throw new InvalidOperationException("Sequence contains no elements");
-
-            var most = sourceIterator.Current;
-            var mostKey = selector(most);
-            while (sourceIterator.MoveNext())
+            var candidate = sourceIterator.Current;
+            var candidateProjected = selector(candidate);
+            if (comparer.Compare(candidateProjected, mostKey) * factor < 0)
             {
-                var candidate = sourceIterator.Current;
-                var candidateProjected = selector(candidate);
-                if (comparer.Compare(candidateProjected, mostKey) * factor < 0)
-                {
-                    most = candidate;
-                    mostKey = candidateProjected;
-                }
+                most = candidate;
+                mostKey = candidateProjected;
             }
-
-            return most;
         }
+
+        return most;
     }
 }
