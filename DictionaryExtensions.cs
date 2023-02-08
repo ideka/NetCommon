@@ -12,6 +12,15 @@ public static class DictionaryExtensions
         return source;
     }
 
+    public static IDictionary<TKey, TValue> MergeKeep<TKey, TValue>(this IDictionary<TKey, TValue> source,
+        IDictionary<TKey, TValue> other)
+    {
+        foreach (var (key, value) in other)
+            if (!source.ContainsKey(key))
+                source[key] = value;
+        return source;
+    }
+
     public static void Deconstruct<TK, TV>(this KeyValuePair<TK, TV> pair, out TK key, out TV value)
     {
         key = pair.Key;
