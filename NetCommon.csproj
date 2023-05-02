@@ -1,15 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\Local.props" Condition="Exists('..\Local.props')"/>
+
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <RootNamespace>Ideka.NetCommon</RootNamespace>
     <Nullable>enable</Nullable>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)' == 'Release' And '$(NoRandomize)' != 'True'">
-    <RandomGuid>$([System.Guid]::NewGuid())</RandomGuid>
-    <AssemblyName>$(RandomGuid)</AssemblyName>
+    <AssemblyName>$(CommonPrefix)NetCommon</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
