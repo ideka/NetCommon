@@ -5,7 +5,7 @@ namespace Ideka.NetCommon;
 
 public class DisposableCollection : IDisposable
 {
-    private readonly HashSet<IDisposable> _disposables = new();
+    private readonly HashSet<IDisposable> _disposables = [];
 
     public T Add<T>(T disposable) where T : notnull, IDisposable
     {
