@@ -2,12 +2,7 @@
 
 namespace Ideka.NetCommon;
 
-public readonly struct WhenDisposed(Action act) : IDisposable
+public readonly struct WhenDisposed(Action action) : IDisposable
 {
-    private readonly Action _act = act;
-
-    public void Dispose()
-    {
-        _act();
-    }
+    public void Dispose() => action();
 }
