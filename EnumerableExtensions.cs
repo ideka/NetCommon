@@ -9,6 +9,9 @@ public static class EnumerableExtensions
     public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> source)
         => source.ToDictionary(x => x.Key, x => x.Value);
 
+    public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector)
+        => source.GroupBy(selector).Select(x => x.First());
+
     public static IEnumerable<(int index, T item)> Enumerate<T>(this IEnumerable<T> source)
         => source.Select((t, i) => (i, t));
 
