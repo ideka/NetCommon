@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Ideka.NetCommon;
@@ -34,6 +35,20 @@ public static class EnumerableExtensions
     public static TSource MinBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector,
         IComparer<TKey>? comparer)
         => source.MostBy(selector, comparer, false);
+
+    public static IEnumerable<TSource> WhereNotNull<TSource>(this IEnumerable<TSource?> source) where TSource : struct
+    {
+        foreach (var item in source)
+            if (item is TSource notNull)
+                yield return notNull;
+    }
+
+    public static IEnumerable<TSource> WhereNotNull<TSource>(this IEnumerable<TSource?> source) where TSource : class
+    {
+        foreach (var item in source)
+            if (item is TSource notNull)
+                yield return notNull;
+    }
 
     private static TSource MostBy<TSource, TKey>(this IEnumerable<TSource> source,
         Func<TSource, TKey> selector, IComparer<TKey>? comparer, bool max)
