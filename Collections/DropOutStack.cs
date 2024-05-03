@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Ideka.NetCommon;
@@ -20,7 +21,7 @@ public class DropOutStack<T>(int capacity) : LinkedList<T>
         }
     }
 
-    public bool TryGetLast(out T? last)
+    public bool TryGetLast([MaybeNullWhen(false)] out T last)
     {
         lock (_lock)
         {
