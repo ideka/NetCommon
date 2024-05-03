@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace Ideka.NetCommon;
@@ -21,6 +20,23 @@ public static class EnumerableExtensions
 
     public static IEnumerable<(TA, TB)> Zip<TA, TB>(this IEnumerable<TA> source, IEnumerable<TB> other)
         => source.Zip(other, (a, b) => (a, b));
+
+    public static IEnumerable<(TA?, TB?)> ZipLongest<TA, TB>(this IEnumerable<TA> source, IEnumerable<TB> other)
+    {
+        if (source == null) throw new ArgumentNullException(nameof(source));
+        if (other == null) throw new ArgumentNullException(nameof(other));
+
+        using var a = source.GetEnumerator();
+        using var b = other.GetEnumerator();
+
+        bool aMore;
+        bool bMore;
+
+        while ((aMore = a.MoveNext()) | (bMore = b.MoveNext()))
+            yield return (
+                aMore ? a.Current : default,
+                bMore ? b.Current : default);
+    }
 
     public static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector)
         => source.MaxBy(selector, null);
