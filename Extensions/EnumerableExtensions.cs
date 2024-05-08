@@ -1,15 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Ideka.NetCommon;
 
 public static class EnumerableExtensions
 {
-    public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> source)
+    public static async Task<IEnumerable<TResult>> SelectAsync<TSource, TResult>(
+        this IEnumerable<TSource> source, Func<TSource, Task<TResult>> selector)
+        => await Task.WhenAll(source.Select(async x => await selector(x)));
+
+    public static async Task<IEnumerable<TResult>> SelectManyAsync<TSource, TResult>(
+        this IEnumerable<TSource> source, Func<TSource, Task<IEnumerable<TResult>>> selector)
+        => (await source.SelectAsync(selector)).SelectMany(x => x);
+
+    public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(
+        this IEnumerable<KeyValuePair<TKey, TValue>> source)
         => source.ToDictionary(x => x.Key, x => x.Value);
 
-    public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector)
+    public static IEnumerable<TSource> DistinctBy<TSource, TKey>(
+        this IEnumerable<TSource> source, Func<TSource, TKey> selector)
         => source.GroupBy(selector).Select(x => x.First());
 
     public static IEnumerable<(int index, T item)> Enumerate<T>(this IEnumerable<T> source)
