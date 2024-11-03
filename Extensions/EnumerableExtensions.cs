@@ -29,8 +29,15 @@ public static class EnumerableExtensions
     public static IEnumerable<(T, T)> By2<T>(this IEnumerable<T> source)
         => source.Zip(source.Skip(1));
 
+    public static IEnumerable<(T, T, T)> By3<T>(this IEnumerable<T> source)
+        => source.Zip(source.Skip(1), source.Skip(2));
+
     public static IEnumerable<(TA, TB)> Zip<TA, TB>(this IEnumerable<TA> source, IEnumerable<TB> other)
         => source.Zip(other, (a, b) => (a, b));
+
+    public static IEnumerable<(TA, TB, TC)> Zip<TA, TB, TC>(
+        this IEnumerable<TA> source, IEnumerable<TB> other1, IEnumerable<TC> other2)
+        => source.Zip(other1.Zip(other2, (a, b) => (a, b)), (a, b) => (a, b.a, b.b));
 
     public static IEnumerable<(TA?, TB?)> ZipLongest<TA, TB>(this IEnumerable<TA> source, IEnumerable<TB> other)
     {
