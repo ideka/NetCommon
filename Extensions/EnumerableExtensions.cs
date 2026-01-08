@@ -63,12 +63,26 @@ public static class EnumerableExtensions
         IComparer<TKey>? comparer)
         => source.MostBy(selector, comparer, true);
 
+    public static TSource? MaxByOrDefault<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector)
+        => source.MaxByOrDefault(selector, null);
+
+    public static TSource? MaxByOrDefault<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector,
+        IComparer<TKey>? comparer)
+        => source.MostByOrDefault(selector, comparer, true);
+
     public static TSource MinBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector)
         => source.MinBy(selector, null);
 
     public static TSource MinBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector,
         IComparer<TKey>? comparer)
         => source.MostBy(selector, comparer, false);
+
+    public static TSource? MinByOrDefault<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector)
+        => source.MinByOrDefault(selector, null);
+
+    public static TSource? MinByOrDefault<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector,
+        IComparer<TKey>? comparer)
+        => source.MostByOrDefault(selector, comparer, false);
 
     public static IEnumerable<TSource> WhereNotNull<TSource>(this IEnumerable<TSource?> source) where TSource : struct
     {
@@ -87,6 +101,17 @@ public static class EnumerableExtensions
     private static TSource MostBy<TSource, TKey>(this IEnumerable<TSource> source,
         Func<TSource, TKey> selector, IComparer<TKey>? comparer, bool max)
     {
+        if (source?.Any() == false)
+            throw new InvalidOperationException("Sequence contains no elements");
+
+#pragma warning disable CS8604 // Possible null reference argument.
+        return MostByOrDefault(source, selector, comparer, max)!;
+#pragma warning restore CS8604 // Possible null reference argument.
+    }
+
+    private static TSource? MostByOrDefault<TSource, TKey>(this IEnumerable<TSource> source,
+        Func<TSource, TKey> selector, IComparer<TKey>? comparer, bool max)
+    {
         if (source == null) throw new ArgumentNullException(nameof(source));
         if (selector == null) throw new ArgumentNullException(nameof(selector));
         comparer ??= Comparer<TKey>.Default;
@@ -94,7 +119,7 @@ public static class EnumerableExtensions
 
         using var sourceIterator = source.GetEnumerator();
         if (!sourceIterator.MoveNext())
-            throw new InvalidOperationException("Sequence contains no elements");
+            return default;
 
         var most = sourceIterator.Current;
         var mostKey = selector(most);
