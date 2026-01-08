@@ -6,6 +6,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <RootNamespace>Ideka.NetCommon</RootNamespace>
+    <Platforms>x64</Platforms>
     <Nullable>enable</Nullable>
     <AssemblyName>$(CommonPrefix)NetCommon</AssemblyName>
   </PropertyGroup>
